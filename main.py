@@ -44,7 +44,7 @@ def compute_all_pairs_shortest_paths(cities, distances):
     full_paths = dict(nx.all_pairs_dijkstra_path(G, weight='weight'))
     return shortest_paths, full_paths
 
-def traveling_salesman_with_indirect_routes(cities, mandatory_stops, shortest_paths):
+def traveling_salesman(mandatory_stops, shortest_paths, include_return):
     n = len(mandatory_stops)
     dp = [[float('inf')] * n for _ in range(1 << n)]
     dp[1][0] = 0
@@ -57,7 +57,9 @@ def traveling_salesman_with_indirect_routes(cities, mandatory_stops, shortest_pa
     min_cost = float('inf')
     last_city = -1
     for u in range(1, n):
-        cost = dp[(1 << n) - 1][u] + shortest_paths[mandatory_stops[u]][mandatory_stops[0]]
+        cost = dp[(1 << n) - 1][u]
+        if include_return:
+            cost += shortest_paths[mandatory_stops[u]][mandatory_stops[0]]
         if cost < min_cost:
             min_cost = cost
             last_city = u
@@ -65,15 +67,7 @@ def traveling_salesman_with_indirect_routes(cities, mandatory_stops, shortest_pa
     mask = (1 << n) - 1
     current_city = last_city
     while current_city != -1:
-        path.append(mandatory_stops[current_city])
-        next_mask = mask ^ (1 << current_city)
-        next_city = -1
-        for u in range(n):
-            if dp[mask][current_city] == dp[next_mask][u] + shortest_paths[mandatory_stops[u]][mandatory_stops[current_city]]:
-                next_city = u
-                break
-        mask = next_mask
-        current_city = next_city
+       
     path.append(mandatory_stops[0])
     path.reverse()
     return path, min_cost
