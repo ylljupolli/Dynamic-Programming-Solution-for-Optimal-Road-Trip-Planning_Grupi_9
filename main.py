@@ -136,6 +136,7 @@ if __name__ == "__main__":
             [100, 750, 0, 1500, 0, 1000],
             [0, 100, 800, 0, 1000, 0]
      ]
+
      positions = [
         (2.3522, 48.8566),
         (13.4050, 52.5200),
@@ -144,4 +145,5 @@ if __name__ == "__main__":
         (4.9041, 52.3676),
         (16.3738, 48.2082)
      ]
-    optimal_road_trip(cities, base_distances, positions)
+
+     optimal_road_trip(cities, base_distances, positions)
