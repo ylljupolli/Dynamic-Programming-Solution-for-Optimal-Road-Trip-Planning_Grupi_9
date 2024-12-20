@@ -127,23 +127,32 @@ def optimal_road_trip(cities, distances, positions):
         plt.close('all')
 
 if __name__ == "__main__":
-     cities = ["Paris", "Berlin", "Rome", "Madrid", "Amsterdam", "Vienna"]
-     base_distances = [
-            [0, 1050, 0, 1260, 100, 0],
-            [1050, 0, 1180, 0, 750, 100],
-            [0, 1180, 0, 1360, 0, 800],
-            [1260, 0, 1360, 0, 1500, 0],
-            [100, 750, 0, 1500, 0, 1000],
-            [0, 100, 800, 0, 1000, 0]
-     ]
+    cities = [
+        "Brittany", "Normandy", "Île-de-France", "Hauts-de-France", "Grand Est",
+        "Pays de la Loire", "Centre-Val de Loire", "Bourgogne-Franche-Comté",
+        "Nouvelle-Aquitaine", "Occitanie", "Auvergne-Rhône-Alpes", "Provence-Alpes-Côte d'Azur", "Corsica"
+    ]
 
-     positions = [
-        (2.3522, 48.8566),
-        (13.4050, 52.5200),
-        (12.4964, 41.9028),
-        (-3.7038, 40.4168),
-        (4.9041, 52.3676),
-        (16.3738, 48.2082)
-     ]
+    base_distances = [
+        [0, 300, 400, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0],  # Brittany
+        [300, 0, 200, 400, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # Normandy
+        [400, 200, 0, 300, 400, 0, 200, 0, 0, 0, 0, 0, 0],  # Île-de-France
+        [0, 400, 300, 0, 300, 0, 0, 0, 0, 0, 0, 0, 0],  # Hauts-de-France
+        [0, 0, 400, 300, 0, 0, 0, 600, 0, 0, 0, 0, 0],  # Grand Est
+        [200, 0, 0, 0, 0, 0, 300, 0, 500, 0, 0, 0, 0],  # Pays de la Loire
+        [0, 0, 200, 0, 0, 300, 0, 400, 0, 0, 0, 0, 0],  # Centre-Val de Loire
+        [0, 0, 0, 0, 600, 0, 400, 0, 600, 0, 800, 0, 0],  # Bourgogne-Franche-Comté
+        [0, 0, 0, 0, 0, 500, 0, 600, 0, 500, 600, 0, 0],  # Nouvelle-Aquitaine
+        [0, 0, 0, 0, 0, 0, 0, 0, 500, 0, 200, 600, 0],  # Occitanie
+        [0, 0, 0, 0, 0, 0, 0, 800, 600, 200, 0, 100, 0],  # Auvergne-Rhône-Alpes
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 600, 100, 0, 700],  # Provence-Alpes-Côte d'Azur
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 700, 0],  # Corsica
+    ]
 
-     optimal_road_trip(cities, base_distances, positions)
+    positions = [
+        (1.8, 8.3), (3.5, 9), (5, 8.8), (5, 10.5), (7, 9),
+        (2.8, 7.3), (4.5, 7.5), (6.5, 7), (3.5, 4.8),
+        (5, 3), (6.5, 5), (7.3, 3.2), (9.5, 1.5)
+    ]
+
+    optimal_road_trip(cities, base_distances, positions)
