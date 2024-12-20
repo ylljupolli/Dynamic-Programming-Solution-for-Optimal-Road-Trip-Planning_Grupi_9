@@ -12,6 +12,11 @@ def plot_graph_with_background(cities, distances, positions, map_image_path):
     fig, ax = plt.subplots(figsize=(10, 12))
     ax.imshow(img, extent=[0, 10, 0, 12], aspect='auto')
     pos = {city: positions[i] for i, city in enumerate(cities)}
+    nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=1000, font_size=8, font_weight='bold', ax=ax)
+    edge_labels = nx.get_edge_attributes(G, 'weight')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, ax=ax, font_size=8)
+    plt.title("Cities and Travel Costs (All Regions)")
+    plt.show(block=False)
 
 def plot_final_subgraph(cities, positions, full_path, map_image_path, distances, include_return):
     img = mpimg.imread(map_image_path)
@@ -23,6 +28,11 @@ def plot_final_subgraph(cities, positions, full_path, map_image_path, distances,
     fig, ax = plt.subplots(figsize=(10, 12))
     ax.imshow(img, extent=[0, 10, 0, 12], aspect='auto')
     pos = {city: positions[cities.index(city)] for city in cities}
+    nx.draw(G, pos, with_labels=True, node_color='lightgreen', node_size=1000, font_size=10, font_weight='bold', edge_color='blue', ax=ax)
+    edge_labels = {(u, v): G[u][v]['weight'] for u, v in G.edges}
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8, font_color='red', ax=ax)
+    plt.title("Optimal Route")
+    plt.show(block=True)
 
 def compute_all_pairs_shortest_paths(cities, distances):
     G = nx.Graph()
