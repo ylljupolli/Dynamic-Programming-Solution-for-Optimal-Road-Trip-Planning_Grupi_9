@@ -2,6 +2,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+map_image_path = "map.png"
+
 def plot_graph_with_background(cities, distances, positions, map_image_path):
     img = mpimg.imread(map_image_path)
     G = nx.Graph()
@@ -23,7 +25,7 @@ def plot_final_subgraph(cities, positions, full_path, map_image_path, distances,
     G = nx.DiGraph()
     for i in range(len(full_path) - 1):
         G.add_edge(full_path[i], full_path[i + 1], weight=distances[cities.index(full_path[i])][cities.index(full_path[i + 1])])
-    if include_return:
+    if include_return and distances[cities.index(full_path[-1])][cities.index(full_path[0])] > 0:
         G.add_edge(full_path[-1], full_path[0], weight=distances[cities.index(full_path[-1])][cities.index(full_path[0])])
     fig, ax = plt.subplots(figsize=(10, 12))
     ax.imshow(img, extent=[0, 10, 0, 12], aspect='auto')
@@ -58,7 +60,7 @@ def traveling_salesman(mandatory_stops, shortest_paths, include_return):
     last_city = -1
     for u in range(1, n):
         cost = dp[(1 << n) - 1][u]
-        if include_return:
+        if include_return and shortest_paths[mandatory_stops[u]][mandatory_stops[0]] > 0:
             cost += shortest_paths[mandatory_stops[u]][mandatory_stops[0]]
         if cost < min_cost:
             min_cost = cost
