@@ -1,6 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from itertools import permutations
+import matplotlib.image as mpimg
 
 def plot_graph_with_background(cities, distances, positions, map_image_path):
     img = mpimg.imread(map_image_path)
@@ -127,21 +127,21 @@ def optimal_road_trip(cities, distances, positions):
         plt.close('all')
 
 if __name__ == "__main__":
-    cities = ["Paris", "Berlin", "Rome", "Madrid", "Amsterdam", "Vienna"]
-    base_distances = [
-        [0, 1050, 0, 1260, 100, 0],
-        [1050, 0, 1180, 0, 750, 100],
-        [0, 1180, 0, 1360, 0, 800],
-        [1260, 0, 1360, 0, 1500, 0],
-        [100, 750, 0, 1500, 0, 1000],
-        [0, 100, 800, 0, 1000, 0]
-    ]
-    positions = [
+     cities = ["Paris", "Berlin", "Rome", "Madrid", "Amsterdam", "Vienna"]
+     base_distances = [
+            [0, 1050, 0, 1260, 100, 0],
+            [1050, 0, 1180, 0, 750, 100],
+            [0, 1180, 0, 1360, 0, 800],
+            [1260, 0, 1360, 0, 1500, 0],
+            [100, 750, 0, 1500, 0, 1000],
+            [0, 100, 800, 0, 1000, 0]
+     ]
+     positions = [
         (2.3522, 48.8566),
         (13.4050, 52.5200),
         (12.4964, 41.9028),
         (-3.7038, 40.4168),
         (4.9041, 52.3676),
         (16.3738, 48.2082)
-    ]
+     ]
     optimal_road_trip(cities, base_distances, positions)
