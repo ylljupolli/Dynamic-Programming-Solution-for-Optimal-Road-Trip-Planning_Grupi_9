@@ -67,7 +67,15 @@ def traveling_salesman(mandatory_stops, shortest_paths, include_return):
     mask = (1 << n) - 1
     current_city = last_city
     while current_city != -1:
-       
+        path.append(mandatory_stops[current_city])
+        next_mask = mask ^ (1 << current_city)
+        next_city = -1
+        for u in range(n):
+            if dp[mask][current_city] == dp[next_mask][u] + shortest_paths[mandatory_stops[u]][mandatory_stops[current_city]]:
+                next_city = u
+                break
+        mask = next_mask
+        current_city = next_city
     path.append(mandatory_stops[0])
     path.reverse()
     return path, min_cost
