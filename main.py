@@ -78,24 +78,41 @@ def reconstruct_full_path(path, full_paths):
     return full_path
 
 def optimal_road_trip(cities, distances, positions):
-    n = len(cities)
-    plot_graph(cities, distances, positions)
+    plot_graph_with_background(cities, distances, positions, map_image_path)
     budget = float(input("Enter your budget for the trip: "))
     print("Cities:")
     for i, city in enumerate(cities):
         print(f"{i}: {city}")
     mandatory_indices = list(map(int, input("Enter the indices of mandatory stops (comma-separated): ").split(',')))
+    non_mandatory_input = input("Enter the indices of non-mandatory stops (comma-separated, or press Enter to skip): ").strip()
+    non_mandatory_indices = list(map(int, non_mandatory_input.split(','))) if non_mandatory_input else []
     mandatory_stops = [cities[i] for i in mandatory_indices]
+    non_mandatory_stops = [cities[i] for i in non_mandatory_indices]
+    include_return = input("Do you want to include the returning route to the starting city? (yes/no): ").strip().lower() == 'yes'
+    plt.close('all')
     shortest_paths, full_paths = compute_all_pairs_shortest_paths(cities, distances)
-    tsp_path, tsp_cost = traveling_salesman_with_indirect_routes(cities, mandatory_stops, shortest_paths)
-    if tsp_cost <= budget:
-        full_path = reconstruct_full_path(tsp_path, full_paths)
-        print("Optimal Route:", full_path)
-        print("Total Cost:", tsp_cost)
-        print("Visit the cities in this order:", " -> ".join(full_path))
-        plot_final_subgraph(cities, positions, full_path)
+    mandatory_path, mandatory_cost = traveling_salesman(mandatory_stops, shortest_paths, include_return)
+    if mandatory_cost <= budget:
+        print("Mandatory Route:", mandatory_path)
+        print("Cost:", mandatory_cost)
+        full_path = reconstruct_full_path(mandatory_path, full_paths)
+        plot_final_subgraph(cities, positions, full_path, map_image_path, distances, include_return)
+        remaining_budget = budget - mandatory_cost
+        if non_mandatory_stops:
+            all_stops = mandatory_stops + [stop for stop in non_mandatory_stops if stop not in mandatory_stops]
+            combined_path, combined_cost = traveling_salesman(all_stops, shortest_paths, include_return)
+            if combined_cost <= budget:
+                print("Combined Route (Including Non-Mandatory Stops):", combined_path)
+                print("Cost:", combined_cost)
+                full_combined_path = reconstruct_full_path(combined_path, full_paths)
+                plot_final_subgraph(cities, positions, full_combined_path, map_image_path, distances, include_return)
+            else:
+                print("Not enough budget to include non-mandatory stops.")
+        else:
+            print("No non-mandatory stops specified.")
     else:
-        print("No feasible route within the budget.")
+        print("No feasible route within the budget for mandatory stops.")
+        plt.close('all')
 
 if __name__ == "__main__":
     cities = ["Paris", "Berlin", "Rome", "Madrid", "Amsterdam", "Vienna"]
