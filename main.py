@@ -2,18 +2,16 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from itertools import permutations
 
-def plot_graph(cities, distances, positions):
+def plot_graph_with_background(cities, distances, positions, map_image_path):
+    img = mpimg.imread(map_image_path)
     G = nx.Graph()
     for i, city in enumerate(cities):
         for j, cost in enumerate(distances[i]):
             if cost > 0:
                 G.add_edge(cities[i], cities[j], weight=cost)
+    fig, ax = plt.subplots(figsize=(10, 12))
+    ax.imshow(img, extent=[0, 10, 0, 12], aspect='auto')
     pos = {city: positions[i] for i, city in enumerate(cities)}
-    labels = nx.get_edge_attributes(G, 'weight')
-    nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=3000, font_size=10, font_weight='bold')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels, font_color='red')
-    plt.title("Cities and Travel Costs")
-    plt.show()
 
 def plot_final_subgraph(cities, positions, full_path):
     G = nx.DiGraph()
