@@ -13,14 +13,16 @@ def plot_graph_with_background(cities, distances, positions, map_image_path):
     ax.imshow(img, extent=[0, 10, 0, 12], aspect='auto')
     pos = {city: positions[i] for i, city in enumerate(cities)}
 
-def plot_final_subgraph(cities, positions, full_path):
+def plot_final_subgraph(cities, positions, full_path, map_image_path, distances, include_return):
+    img = mpimg.imread(map_image_path)
     G = nx.DiGraph()
     for i in range(len(full_path) - 1):
-        G.add_edge(full_path[i], full_path[i + 1])
+        G.add_edge(full_path[i], full_path[i + 1], weight=distances[cities.index(full_path[i])][cities.index(full_path[i + 1])])
+    if include_return:
+        G.add_edge(full_path[-1], full_path[0], weight=distances[cities.index(full_path[-1])][cities.index(full_path[0])])
+    fig, ax = plt.subplots(figsize=(10, 12))
+    ax.imshow(img, extent=[0, 10, 0, 12], aspect='auto')
     pos = {city: positions[cities.index(city)] for city in cities}
-    nx.draw(G, pos, with_labels=True, node_color='lightgreen', node_size=3000, font_size=10, font_weight='bold')
-    plt.title("Optimal Route with Intermediate Stops")
-    plt.show()
 
 def compute_all_pairs_shortest_paths(cities, distances):
     G = nx.Graph()
